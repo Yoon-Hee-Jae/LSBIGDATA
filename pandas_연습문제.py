@@ -38,3 +38,4 @@ max_mean_idx
 
 df.loc[max_mean_idx,['name','average']] # 답안
 
+asda
