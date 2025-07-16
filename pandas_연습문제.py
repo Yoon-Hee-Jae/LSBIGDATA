@@ -14,7 +14,7 @@ df[df['midterm']>=85]
 df.sort_values("final",ascending=False).head()
 
 # 4번 gener 기준 그룹화 후 그룹별 중간 기말 점수 평균 계산
-df.groupby('gender')[['midterm','final']].mean()
+df.groupby('gender',as_index=False)[['midterm','final']].mean()
 
 # 5번
 
@@ -23,6 +23,10 @@ df.head(10)
 max_ass = df.iloc[np.where(df['assignment']==max(df['assignment']))[0],:]
 min_ass = df.iloc[np.where(df['assignment']==min(df['assignment']))[0],:]
 print(max_ass,'/n',min_ass)
+# idxmax, idxmin 사용해보기
+max_idx = df['assignment'].idxmax()
+min_idx = df['assignment'].idxmin()
+df.iloc[max_idx,:]
 
 # 10번 중간 기말 과제의 평균을 구하고 average열을 생성하세요
 # 성별, 성적유형 별 평균 점수를 구하세요
@@ -52,6 +56,7 @@ result.reset_index()
 # 최대 평균 성적을 가진 학생의 이름과 평균 성적을 출력하세요
 df
 max_mean_idx = np.argmax(df['average'])
+# max_mean_idx = df['average'].idxmax()
 max_mean_idx
 
 df.loc[max_mean_idx,['name','average']] # 답안
