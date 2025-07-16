@@ -105,3 +105,11 @@ pd.melt(df3,id_vars=["학급",'학생'],
         var_name="언어과목",
         value_vars=["국어","영어"],
         value_name="성적")
+
+
+##result_df = long_df.pivot_table(
+#    index="학생",
+#    columns="과목",
+#    values = "점수"
+#).reset_index()
+#result_df.columns.name = None
