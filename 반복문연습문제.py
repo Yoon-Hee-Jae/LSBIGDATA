@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+
 # 연습문제1
 def add_numbers(a=1,b=2):
     return a+b
@@ -27,8 +28,9 @@ print_numbers()
 
 # 연습문제4
 def outer_function(x):
-    inner_function = x +2
-    return inner_function
+    def inner_function(y):
+        return y +2
+    return inner_function(x)
 outer_function(5)
 
 # 연습문제5
