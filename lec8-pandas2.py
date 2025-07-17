@@ -91,6 +91,8 @@ w_df
 
 l_df = pd.melt(w_df, id_vars=['학년',"반"], var_name="월",value_name="출석일수")
 l_df
+l_df.sort_values(['학년','반'])
+l_df.sort_values(['학년','반'],ascending=[True,False])
 
 # 연습2
 df3 = pd.DataFrame({
