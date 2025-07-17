@@ -78,8 +78,11 @@ person.keys() # keys: key들을 불러오는 매서드
 a = {1:'hi'}
 a[2] = 'b' 
 a['name'] = 'issac'
+a
 del a[1]
+a
 a[2]
+type(a.keys())
 list(a.keys())[1] #딕셔너리의 원소를 리스트로 바꾸어서 빼내는 방법
 list(a.values())[1]
 'name' in a # in: 딕셔너리안에 있는 key가 있는지 확인하는 방법
