@@ -14,10 +14,9 @@ df.head()
 df40 = df[ (df['age']>=40) & (df['age']<50) ]
 mean_num = df40.groupby('sex',as_index=False)['fare'].mean().iloc[1,1]
 
-
 # 3번
 import numpy as np
-# A = np.array([[1,2],[3,4]])
+# a = np.array([[1,2],[3,4]])
 x = np.array([[2,4],
               [1,7],
               [7,8]])
