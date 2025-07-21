@@ -47,7 +47,9 @@ df = pd.DataFrame({
         '123',          # [^a-z], [0-9]
         'the end',      # d$, e.
         'space bar',    # [aeiou], . (space)
-        'hi!'           # [^0-9], [aeiou]
+        'hi!',           # [^0-9], [aeiou]
+        'blue',
+        'lue'
     ]
 })
 print(df)
@@ -55,3 +57,4 @@ df['text'].str.extract(r'([aeiou])')
 df['text'].str.extractall(r'([aeiou])')
 df['text'].str.extractall(r'([^0-9])')
 df['text'].str.extractall(r'(a.c)')
+df['text'].str.extractall(r'(b?lue)')

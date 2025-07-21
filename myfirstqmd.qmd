@@ -1,0 +1,71 @@
+---
+title: "2조 발표"
+format: html
+jupyter: python3
+---
+
+## 1. 분석 주제
+
+결항 또는 지연시간에 대한 보상안 제시
+
+주제 선정 이유:
+
+지연과 결항의 원인이 다양하다. ( 날씨, 기체 결함, 등등 )
+
+책임의 대상이 명확하지 않다.
+
+지연과 결항 원인을 정확하게 분석하여 책임의 주체를 확실히 규정한다.
+
+이를 통해 억울하게 항공사가 보상을 하는 일이 없도록 하여 손실을 최소화함.
+
+## 2. 분석 데이터 탐색
+
+```{python}
+#/ echo = true 코드를 실제로 보여주는지
+#/ eval: false 
+#/ output: false 코드 실행 결과를 보여주는지 
+import pandas as pd
+import nycflights13 as flights
+import numpy as np
+# 항공편 데이터 (main dataset)
+df_flights = flights.flights
+df_airlines = flights.airlines
+df_airports = flights.airports
+df_planes = flights.planes
+df_weather = flights.weather
+```
+
+## 데이터 설명
+
+### 데이터 프레임 종류
+
+flights : 3개의 뉴욕 공항에서 출발한 항공편 데이터
+
+airlines : 항공사 정보 데이터
+
+airports : 미국 내 공항 정보 데이터
+
+planes : 기체 정보 및 제조 업체 데이터
+
+weather : 기상 데이터
+
+## 데이터 시각화
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# 월 별 출발 지연시간 합계
+delay_sum = df_flights.groupby(['month'],as_index=False)[['dep_delay','arr_delay']].sum()
+delay_mean = df_flights.groupby(['month'],as_index=False)[['dep_delay','arr_delay']].mean()
+
+# 월 별 출발 지연시간 총합 시각화 
+# -- 6월, 7월, 12월 지연시간이 확실히 높음
+# -- 9월 , 10월, 11월 지연시간이 확실히 낮음
+plt.figure(figsize=(10, 6))
+sns.barplot(data=delay_sum, x='month', y='dep_delay', color='skyblue', label='Departure Delay')
+plt.title('Monthly Sum Dep Delay Time')
+plt.ylabel('Delay Time (minutes)')
+plt.legend()
+plt.show()
+```
