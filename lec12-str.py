@@ -58,3 +58,18 @@ df['text'].str.extractall(r'([aeiou])')
 df['text'].str.extractall(r'([^0-9])')
 df['text'].str.extractall(r'(a.c)')
 df['text'].str.extractall(r'(b?lue)')
+
+data = {
+    '주소': ['서울특별시 강남구 테헤란로 123', '부산광역시 해운대구 센텀중앙로 45', '대구광역시 수성구 동대구로 77-9@@##', '인천광역시 남동구 예술로 501&amp;&amp;, 아트센터', '광주광역시 북구 용봉로 123']
+}
+df = pd.DataFrame(data)
+
+df['도시'] = df['주소'].str.extract(r'([가-힣]+광역시|[가-힣]+특별시)', expand=False)
+print(df.head(2))
+
+special_chars = df['주소'].str.extractall(r'([^a-zA-Z0-9가-힣\s])')
+print(special_chars)
+
+
+df['주소_특수문자제거'] = df['주소'].str.replace(r'[^a-zA-Z0-9가-힣\s]', '', regex=True)
+print(df.head(2))
