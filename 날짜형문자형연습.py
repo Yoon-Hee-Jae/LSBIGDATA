@@ -67,13 +67,13 @@ df['제거'] = df['로그'].str.replace(r'[^a-zA-Z0-9가-힣\s]', '', regex=True
 # 13번 로그 칼럼에서 유저, Amount 값을 추출한 후 각 유저별 Amount의 평균값을 계산하시오.
 df
 df['숫자']
-
+df['숫자']
 def get_last_number(lst):
     if lst:  # 리스트가 비어있지 않으면
         return lst[-1]
     else:
         return None
-
+df['로그']
 df['amount'] = df['로그'].str.findall(r'\d+').apply(get_last_number)
 df['amount']
 type(df['amount'][0])
@@ -82,6 +82,11 @@ type(df['amount'][0])
 
 ans = df.groupby('User',as_index=False)[['amount']].mean()
 ans.sort_values('User')
+
+
+#
+df['Amount'] = df['로그'].str.extract(r'Amount:\s*(\d+)').astype(float)
+df['Amount']
 
 
 
