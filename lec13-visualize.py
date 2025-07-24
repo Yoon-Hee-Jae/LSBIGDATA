@@ -188,7 +188,50 @@ text_str = f'평균 부리길이: {mean_x:.2f} mm\n평균 부리깊이: {mean_y:
 plt.annotate(
     text_str,
     xy=(mean_x, mean_y),              # 화살표 출발점
-    xytext=(mean_x + 2, mean_y + 1),  # 텍스트 위치 (오른쪽 위)
+    xytext=(mean_x + 2, mean_y + 2),  # 텍스트 위치 (오른쪽 위)
+    textcoords='data',
+    arrowprops=dict(facecolor='black', arrowstyle='->'),
+    fontsize=10,
+    bbox=dict(boxstyle='round,pad=0.4', fc='white', ec='gray')
+)
+
+# 제목 및 축
+plt.title('펭귄 종별 부리 길이 vs 깊이')
+plt.xlabel('부리 길이 (mm)')
+plt.ylabel('부리 깊이 (mm)')
+
+# 범례: 오른쪽 하단
+plt.legend(loc='lower right')
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+##################################
+
+# 필요한 열에서 결측치 제거
+df_plot = df[['species', 'bill_length_mm', 'bill_depth_mm']].dropna()
+
+# Adelie vs 기타종으로 분리
+adelie = df_plot[df_plot['species'] == 'Adelie']
+others = df_plot[df_plot['species'] != 'Adelie']
+
+# 산점도 그리기
+plt.figure(figsize=(8, 6))
+plt.scatter(others['bill_length_mm'], others['bill_depth_mm'],
+            color='gray', label='기타종', alpha=0.7)
+plt.scatter(adelie['bill_length_mm'], adelie['bill_depth_mm'],
+            color='red', label='Adelie', alpha=0.7)
+
+# 아델리 평균 중심점 계산 및 표시
+mean_x = adelie['bill_length_mm'].mean()
+mean_y = adelie['bill_depth_mm'].mean()
+plt.scatter(mean_x, mean_y, color='black', s=100, marker='x', label='Adelie 평균')
+
+# 평균 텍스트: 왼쪽 하단 배치
+text_str = f'평균 부리길이: {mean_x:.2f} mm\n평균 부리깊이: {mean_y:.2f} mm'
+plt.annotate(
+    text_str,
+    xy=(mean_x, mean_y),
+    xytext=(mean_x - 3, mean_y - 1),
     textcoords='data',
     arrowprops=dict(facecolor='black', arrowstyle='->'),
     fontsize=10,
@@ -206,3 +249,48 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
+
+######################################################
+# 섬 이름 한글 매핑
+island_kor_map = {
+    'Biscoe': '비스코 섬',
+    'Dream': '드림 섬',
+    'Torgersen': '토거센 섬'
+}
+
+# 종별 색상 매핑
+species_color_map = {
+    'Adelie': 'red',
+    'Chinstrap': 'green',
+    'Gentoo': 'blue'
+}
+
+# 시각화
+fig, axes = plt.subplots(1, 3, figsize=(20, 7))
+fig.suptitle('각 성별 펭귄 종 서식 현황', fontsize=24)
+
+species_labels = ['Adelie', 'Chinstrap', 'Gentoo']
+handles = []
+
+for ax, island in zip(axes, df['island'].dropna().unique()):
+    data = df[df['island'] == island]['species'].value_counts()
+    labels = data.index
+    sizes = data.values
+    colors = [species_color_map.get(label, 'gray') for label in labels]
+
+    wedges, texts, autotexts = ax.pie(
+        sizes,
+        labels=labels,
+        autopct='%1.1f%%',
+        textprops={'fontsize': 20},
+        colors=colors
+    )
+    ax.set_title(island_kor_map[island], fontsize=18)
+
+    if not handles:  # 첫 번째 반복일 때만 범례용 핸들 생성
+        handles = wedges
+
+# 범례 추가 (전체 하나만)
+fig.legend(handles, species_labels, loc='lower right', fontsize=16)
+plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+plt.show()
