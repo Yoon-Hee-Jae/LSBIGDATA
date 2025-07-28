@@ -61,3 +61,23 @@ for x, p in zip(x_array, likelihood):
 plt.tight_layout()
 plt.show()
 
+# 동전 두번 던져서 나온 앞면 수
+# 이때 앞면이 나올 확률 = 0.4
+x_array = np.array([0,1,2])
+likelihood = np.array([0.6*0.6, 0.6*0.4, 0.4*0.4])
+
+# 시각화
+plt.figure(figsize=(6, 4))
+plt.bar(x_array, likelihood, width=0.4, color='skyblue', edgecolor='black')
+
+# 라벨과 타이틀
+plt.xlabel('x 값')
+plt.ylabel('확률 (P(x))')
+plt.title('확률분포표 시각화')
+plt.xticks(x_array)
+plt.ylim(0, 1)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# 확률 값 표시
+for x, p in zip(x_array, likelihood):
+    plt.text(x, p + 0.02, f'{p:.2f}', ha='center')
