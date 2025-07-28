@@ -251,6 +251,8 @@ plt.show()
 
 
 ######################################################
+# 파이차트
+#######################################################
 # 섬 이름 한글 매핑
 island_kor_map = {
     'Biscoe': '비스코 섬',
@@ -293,4 +295,108 @@ for ax, island in zip(axes, df['island'].dropna().unique()):
 # 범례 추가 (전체 하나만)
 fig.legend(handles, species_labels, loc='lower right', fontsize=16)
 plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+plt.show()
+
+# 종 리스트
+species_list = df['species'].dropna().unique()
+
+# 성별 한글 매핑
+gender_rename = {'Male': '남자', 'Female': '여자'}
+gender_color_map = {'남자': 'blue', '여자': 'red'}
+
+# 시각화
+fig, axes = plt.subplots(1, len(species_list), figsize=(18, 6))
+fig.suptitle('펭귄 종별 성비', fontsize=24)
+
+for ax, species in zip(axes, species_list):
+    temp = df[df['species'] == species]['sex'].value_counts()
+
+    # 남자-여자 순으로 정렬 (왼쪽: 남자, 오른쪽: 여자)
+    male_count = temp.get('Male', 0)
+    female_count = temp.get('Female', 0)
+    sizes = [male_count, female_count]
+    labels = ['남자', '여자']
+    colors = [gender_color_map[label] for label in labels]
+
+    wedges, texts, autotexts = ax.pie(
+        sizes,
+        labels=None,  # 라벨 제거
+        autopct='%1.1f%%',
+        startangle=90,
+        colors=colors,
+        textprops={'fontsize': 25}
+    )
+
+    # 각 조각 아래에 '남자', '여자' 텍스트 표시
+    for i, (wedge, label) in enumerate(zip(wedges, labels)):
+        ang = (wedge.theta2 + wedge.theta1) / 2
+        x = 0.7 * np.cos(np.deg2rad(ang))
+        y = 0.7 * np.sin(np.deg2rad(ang))
+        ax.text(x, y - 0.15, label, ha='center', fontsize=16, weight='bold')
+
+    # 종 이름 타이틀 (크기 키우고 '종' 텍스트 제외)
+    ax.set_title(f'{species}', fontsize=20)
+
+plt.tight_layout()
+plt.show()
+
+
+###############################################################
+#레이더차트
+###############################################################
+
+df.info()
+
+
+# 사용할 변수 및 한글 매핑
+features = ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']
+features_kor = ['부리길이(mm)', '부리깊이(mm)', '날개길이(mm)', '몸무게(g)']
+
+# 종별 색상 매핑
+species_color_map = {
+    'Adelie': 'red',
+    'Chinstrap': 'green',
+    'Gentoo': 'blue'
+}
+
+# 결측치 제거
+df_valid = df.dropna(subset=['sex', 'species'] + features)
+
+# 성별-종별 평균 계산
+grouped = df_valid.groupby(['species', 'sex'])[features].mean()
+
+# Min-Max 정규화 (전체 df 기준)
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler()
+grouped_scaled = grouped.copy()
+grouped_scaled[features] = scaler.fit_transform(grouped[features])
+
+# 레이더 차트 각도 세팅
+angles = np.linspace(0, 2 * np.pi, len(features), endpoint=False).tolist()
+angles += angles[:1]  # 도형 닫기
+
+# 레이더 차트 그리기
+fig, axes = plt.subplots(1, 2, figsize=(14, 6), subplot_kw=dict(polar=True))
+fig.suptitle('성별에 따른 펭귄 종별 신체 특성 (정규화)', fontsize=20)
+
+for ax, gender in zip(axes, ['Male', 'Female']):
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(features_kor, fontsize=13)
+
+    ax.set_title('남자' if gender == 'Male' else '여자', fontsize=16, pad=20)
+
+    for species in df_valid['species'].unique():
+        if (species, gender) in grouped_scaled.index:
+            values = grouped_scaled.loc[(species, gender)].tolist()
+            values += values[:1]  # 닫기
+            ax.plot(angles, values, label=species, color=species_color_map[species], linewidth=2)
+            ax.fill(angles, values, color=species_color_map[species], alpha=0.2)
+
+    ax.set_ylim(0, 1)
+    ax.legend(loc='upper right', bbox_to_anchor=(1.2, 1.1))
+
+plt.tight_layout()
 plt.show()
