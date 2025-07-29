@@ -64,7 +64,7 @@ plt.show()
 # 동전 두번 던져서 나온 앞면 수
 # 이때 앞면이 나올 확률 = 0.4
 x_array = np.array([0,1,2])
-likelihood = np.array([0.6*0.6, 0.6*0.4, 0.4*0.4])
+likelihood = np.array([0.6*0.6, 0.6*0.4 + 0.4*0.6, 0.4*0.4])
 
 # 시각화
 plt.figure(figsize=(6, 4))
