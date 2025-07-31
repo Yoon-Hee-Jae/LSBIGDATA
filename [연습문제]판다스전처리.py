@@ -7,14 +7,18 @@ df.info()
 df
 df['합계액'] = df[['금액1','금액2']].sum(axis=1)
 df_group = df.groupby(['gender','지역코드'],as_index=False)['합계액'].sum()
-
-df_pivot = df_group.pivot(index='지역코드',
+df_group
+df_pivot = df_group.pivot_table(index='지역코드',
                                 columns='gender',
-                                values='합계액')
-df_pivot.fillna(0,inplace=True)
+                                values='합계액',
+                                fill_value=0
+                                )
+# df_pivot.fillna(0,inplace=True)
 df_pivot.shape
 df_pivot['정답'] = (df_pivot[0]-df_pivot[1]).abs()
 df_pivot.sort_values('정답',ascending=False)
+max_index = df_pivot['정답'].idxmax()
+max_index
 
 #2. 각 연도별 최대 검거율을 가진 범죄유형을 찾아서 해당 연도 및 유형의 검거건수들의 총합을 구하시오.
 # (검거율 = 검거건수 / 발생건수)
@@ -155,8 +159,22 @@ df_songdong['dist'].mean().round(2)
 
 # 9 분기별 총 판매량(제품A~E 합계)의 월평균을 구하고, 월평균이 최대인 연도와 분기를 구하시오.
 df = pd.read_csv('https://raw.githubusercontent.com/YoungjinBD/data/main/exam/7_1_3.csv')
+
+# 분기 생성법 노가다
 df['분기'] = np.concatenate([np.repeat(['2018-1분기','2018-2분기','2018-3분기','2018-4분기'],3),np.repeat(['2019-1분기','2019-2분기','2019-3분기','2019-4분기'],3)])
 df
+
+# 분기 생성법 정석
+df[['연도','월']] = df['기간'].str.extract(r'(\d{4})년_(\d{1,2})월')
+df[['연도','월']] = df[['연도','월']].astype(int)
+df['분기'] = (df['월']-1)//3 + 1
+df['총 판매량'] = df.iloc[:,1:6].sum(axis=1)
+df_group = df.groupby(['연도','분기'],as_index=False)['총 판매량'].mean()
+df_group
+df_group.rename(columns = {'총 판매량': '분기별 월 평균'},inplace=True)
+df_group.sort_values('분기별 월 평균',ascending=False)
+
+
 df['총판매량'] = df[['제품A','제품B','제품C','제품D','제품E']].sum(axis=1)
 df_group = df.groupby('분기',as_index=False)['총판매량'].sum().sort_values('총판매량',ascending=False)
 round(df_group['총판매량']/3,6)
