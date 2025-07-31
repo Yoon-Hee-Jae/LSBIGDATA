@@ -1,19 +1,18 @@
 import pandas as pd
 import numpy as np
 
-
 #1. 각 연도, 성별, 지역코드별 총 대출액 합계의 절대값 차이를 구하시오. 해당 데이터를 활용하여 성별의 절대값 차이가 가장 큰 지역코드를 구하시오.
 df = pd.read_csv("https://raw.githubusercontent.com/YoungjinBD/data/main/exam/9_1_1.csv")
 df.info()
+df
 df['합계액'] = df[['금액1','금액2']].sum(axis=1)
 df_group = df.groupby(['gender','지역코드'],as_index=False)['합계액'].sum()
-df_group[df_group['gender']==0]
-df_group[df_group['gender']==1]
 
-df_pivot = df_group.pivot_table(index='지역코드',
+df_pivot = df_group.pivot(index='지역코드',
                                 columns='gender',
                                 values='합계액')
 df_pivot.fillna(0,inplace=True)
+df_pivot.shape
 df_pivot['정답'] = (df_pivot[0]-df_pivot[1]).abs()
 df_pivot.sort_values('정답',ascending=False)
 
@@ -65,13 +64,21 @@ df = pd.read_csv("https://raw.githubusercontent.com/YoungjinBD/data/main/exam/9_
 df
 good_mean = df['평균만족도'].mean()
 df['평균만족도'].fillna(good_mean,inplace=True)
-#
+# 근속연수 결측치 채우기 방법 1
 df_group = df.groupby(["부서","등급"],as_index=False)[['근속연수']].mean()
 df_group['근속연수'] = df_group['근속연수'].astype(int)
 df_group
 for i in range(len(df)):
     if pd.isnull(df['근속연수'].iloc[i]) == True:
         df['근속연수'][i] = df_group['근속연수'][(df_group['부서']==df['부서'][i])&(df_group['등급']==df['등급'][i])]
+df
+# 근속연수 결측치 채우기 방법 2 << for 문을 사용하지 않아서 더 가벼움
+mean_work = df.groupby(['부서','등급'],as_index=False)['근속연수'].mean()
+mean_work.rename(columns = {'근속연수':'평균근속연수'},inplace=True)
+mean_work['평균근속연수'] = mean_work['평균근속연수'].astype(int)
+mean_work
+df = pd.merge(df,mean_work,on=['부서','등급'],how='inner')
+df['근속연수'].loc[df['근속연수'].isna()] = df['평균근속연수'].loc[df['근속연수'].isna()]
 df
 
 A = df[(df['부서']=="HR")&(df['등급']=='A')]['근속연수'].mean()
