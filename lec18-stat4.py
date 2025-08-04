@@ -150,3 +150,13 @@ plt.ylabel('밀도')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+
+x = np.array([14,17,12,14,13,14,16,10,14,15,13,17,12,12,16])
+n = len(X)
+sd = 3 / np.sqrt(n)
+
+X = norm(loc=x.mean(),scale=sd)
+z_05 = norm.ppf(0.05,loc=0,scale=1)
+x.mean() + z_05 * 3/np.sqrt(n)
+x.mean() - z_05 * 3/np.sqrt(n)
