@@ -63,9 +63,10 @@ df_14 = df_13.copy() # df_14 결측치 제거
 df_14.dropna(inplace=True)
 df_14.isnull().sum()
 df_14.head()
+df_14.info()
 df_14.shape
 df_14.info() #a2_1 a4_1 a7_1
-df_14['a2_1'].str.extractall(r'([^a-zA-Z0-9가-힣\s])').index
+df_14['a2_1'].str.extractall(r'([^a-zA-Z0-9가-힣\s])')
 df_14['a4_1'].str.extractall(r'([^a-zA-Z0-9가-힣\s])')
 df_14['a7_1'].str.extractall(r'([^a-zA-Z0-9가-힣\s])')
 df_14.iloc[~[1],:] # 188 - 8
