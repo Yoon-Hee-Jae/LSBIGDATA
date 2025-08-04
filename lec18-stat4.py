@@ -160,3 +160,33 @@ X = norm(loc=x.mean(),scale=sd)
 z_05 = norm.ppf(0.05,loc=0,scale=1)
 x.mean() + z_05 * 3/np.sqrt(n)
 x.mean() - z_05 * 3/np.sqrt(n)
+
+# t 분포와 표준 정규분포 비교
+# t 분포는 자유도에 따라서 그래프 모양이 변함
+# t 값이 작을수록 평균에 값이 몰리기보다 다른 사이드 값이 나오는 빈도가 높아짐
+# 자유도는 계속 커질 수 있지만 표준 정규분포보다 높게 올라가지 않고 일치하게 된다.
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm, t
+
+# x 축 범위 설정
+x = np.linspace(-5, 5, 500)
+
+# 표준 정규분포 PDF
+pdf_norm = norm.pdf(x)
+
+# 자유도 5인 t-분포 PDF
+df = 100
+pdf_t = t.pdf(x, df=df)
+
+# 시각화
+plt.plot(x, pdf_norm, label='표준 정규분포', color='red')
+plt.plot(x, pdf_t, label=f't-분포 (자유도={df})', linestyle='--', color='blue')
+
+plt.title('표준 정규분포 vs t-분포 PDF')
+plt.xlabel('x')
+plt.ylabel('확률밀도 (PDF)')
+plt.legend()
+plt.grid(True)
+plt.show()
