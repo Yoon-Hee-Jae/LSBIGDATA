@@ -190,3 +190,60 @@ plt.ylabel('확률밀도 (PDF)')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+# 신뢰구간
+data = [4.3,4.1,5.2,4.9,5.0,4.5,4.7,4.8,5.2,4.6]
+from scipy.stats import t
+import numpy as np
+mean = np.mean(data)
+n = len(data)
+se= np.std(data,ddof=1)/np.sqrt(n)
+mean - t.ppf(0.975,loc=mean,scale=se,df=n-1)
+t.interval(0.975,loc=mean,scale=se,df=n-1)
+9.89/np.sqrt(20)
+
+from scipy.stats import norm
+X = norm(loc=17,scale=2.21)
+X.cdf(14)
+
+X = norm(loc=0,scale=1)
+X.cdf(-1.357)
+
+# 문제 1
+# # 본포 = 정규분포
+se = 50/np.sqrt(100)
+X_bar = norm(loc=500,scale=se)
+1-X_bar.cdf(510)  
+
+# 문제 2
+from scipy.stats import binom
+binom.pmf(2,20,0.05)
+binom.cdf(2,20,0.05)
+1-binom.cdf(2,20,0.05)
+
+(20*19)/2 * 0.05**2 * (1-0.05)**18
+
+# 문제 3
+X=norm(loc=75,scale=8)
+1- X.cdf(85)
+X.sf(85)
+
+X.sf(70)-X.sf(80)
+
+X.ppf(0.9)
+
+# 문제 4
+# 귀무가설 : 한잔의 평균 온도가 75도이다
+# 대립가설 : 한잔의 평균 온도가 75도가 아니다
+from scipy.stats import t
+data = [72.4,74.1,73.7,76.5,75.3,74.8,75.9,73.4,74.6,75.1]
+len(data)
+sam_std = np.std(data,ddof=1)
+sam_mean = np.mean(data)
+T_STATS = (sam_mean-75)/(sam_std/np.sqrt(10))
+t.cdf(T_STATS,df=9)*2
+
+X_bar = norm(loc=53-50,scale=8/np.sqrt(40))
+
+z_stats = (53-50)/(8/np.sqrt(40))
+(1 - norm(loc=0,scale=1).cdf(abs(z_stats))) * 2
