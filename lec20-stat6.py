@@ -181,7 +181,72 @@ import scipy.stats as sp
 sp.probplot(data,dist='norm',plot=plt)
 plt.show()
 
+# 샤피로 검정법 ( 정규분포 확인 )
+import scipy.stats as sp
+data_x = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55,
+3.11, 11.97, 2.16, 3.24, 10.91, 11.36, 0.87, 9.93, 2.9])
+w, p_value = sp.shapiro(data_x)
+print("W:", w, "p-value:", p_value)
+# p-value가 0.14 이므로 귀무가설을 기각하지못한다
+# 샤피로 귀무가설 : 정규분포를 따른다
+# 샤피로 대립가설 : 정규분포를 따르지 않는다
 
+# t검정시 해야할 것
+# 1. 정규분포를 따르는지 (qq와 샤피로)
+# 2. 2표본t검정일 때는 분산이 같은지 아닌지 체크를 한다 (f검정 사용) 등분산 체크
+
+
+from statsmodels.distributions.empirical_distribution import ECDF
+data_x = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55, 3.11,
+11.97, 2.16, 3.24, 10.91, 11.36, 0.87])
+ecdf = ECDF(data_x)
+x = np.linspace(min(data_x), max(data_x))
+y = ecdf(x)
+plt.plot(x,y,marker='_', linestyle='none')
+plt.title("Estimated CDF")
+plt.xlabel("X-axis")
+plt.ylabel("ECDF")
+plt.show()
+
+## 
+
+from scipy.stats import anderson, norm
+sample_data = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55, 3.11,
+11.97, 2.16, 3.24, 10.91, 11.36, 0.87])
+result = sp.anderson(data, dist='norm') # Anderson-Darling 검정 수행
+print('검정통계량',result[0], '임계값:',result[1], '유의수준:',result[2])
+
+
+
+ecdf = ECDF(data_x)
+x = np.linspace(min(data_x), max(data_x))
+y = ecdf(x)
+plt.scatter(x, y)
+plt.title("Estimated CDF vs. CDF")
+k = np.arange(min(data_x), max(data_x), 0.1)
+plt.plot(k, norm.cdf(k, loc=np.mean(data_x),
+scale=np.std(data_x, ddof=1)), color='k')
+plt.show()
+
+
+
+from scipy.stats import kstest, norm
+import numpy as np
+sample_data = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55, 3.11,
+11.97, 2.16, 3.24, 10.91, 11.36, 0.87])
+# 표본 평균과 표준편차로 정규분포 생성
+loc = np.mean(sample_data)
+scale = np.std(sample_data, ddof=1)
+# 정규분포를 기준으로 K-S 검정 수행
+result = kstest(sample_data, 'norm', args=(loc, scale))
+print("검정통계량:", result.statistic)
+
+
+from scipy.stats import anderson, norm
+sample_data = np.array([4.62, 4.09, 6.2, 8.24, 0.77, 5.55, 3.11,
+11.97, 2.16, 3.24, 10.91, 11.36, 0.87])
+result = sp.anderson(data, dist='norm') # Anderson-Darling 검정 수행
+print('검정통계량',result[0], '임계값:',result[1], '유의수준:',result[2])
 
 
 
