@@ -150,3 +150,4 @@ print("유의수준들:", result.significance_level)
 
 
 
+# 확률심화 문제 4번, 문제 1번 풀어보기

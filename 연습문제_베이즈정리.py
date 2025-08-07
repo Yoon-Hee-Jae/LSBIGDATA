@@ -23,6 +23,7 @@ likelihood = np.array([0.05,0.02,0.03])
 p_break = np.sum(prior*likelihood)
 posterior = (prior*likelihood) / p_break
 posterior
+(0.16/0.54*0.05) / p_break
 # 정답
 ans = round(posterior[0],2)
 print(ans)
