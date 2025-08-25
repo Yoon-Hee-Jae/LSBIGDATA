@@ -66,3 +66,6 @@ expon(scale=1/3).var()
 #4
 from scipy.stats import uniform
 uniform(loc=2,scale=5-2).cdf(4) - uniform(loc=2,scale=5-2).cdf(3)
+
+
+IMPOR
