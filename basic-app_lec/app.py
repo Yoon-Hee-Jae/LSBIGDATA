@@ -1,10 +1,25 @@
-from shiny import render, ui
-from shiny.express import input
+from shiny.express import ui
 
-ui.panel_title("Hello Shiny!")
-ui.input_slider("n", "N", 0, 100, 20)
+ui.page_opts(fillable=True)
 
+"ui.layout_columns()"
 
-@render.text
-def txt():
-    return f"n*2 is {input.n() * 2}"
+with ui.layout_columns(col_widths=(4,4,4)):
+    with ui.card():  
+        ui.card_header("Card with sidebar")
+        with ui.layout_sidebar():  
+            with ui.sidebar(bg="#d02828"):  
+                "Sidebar"  
+            "Card content"
+    with ui.card():
+        ui.card_header("Card with sidebar")
+        with ui.layout_sidebar():  
+            with ui.sidebar(bg="#514cea"):  
+                "Sidebar"  
+            "Card content"
+    with ui.card():
+        ui.card_header("Card with sidebar")
+        with ui.layout_sidebar():  
+            with ui.sidebar(bg="#a2e24e"):  
+                "Sidebar"  
+            "Card content"
