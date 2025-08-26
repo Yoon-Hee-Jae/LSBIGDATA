@@ -38,17 +38,24 @@ with ui.nav_panel("Page 1"):
         with ui.card():
             @render.plot
             def hist():
+                spe_palette = {
+                "Adelie": "#FF7F0E",    # 주황
+                "Chinstrap": "#1F77B4", # 파랑
+                "Gentoo": "#2CA02C"     # 초록
+                }
                 p = sns.scatterplot(
                                 data=filtered_df(),
                                 x=input_1(),
                                 y=input_2(),
-                                hue='species'
+                                hue='species',
+                                palette=spe_palette
                                 )
                 return p
         with ui.card():
             @render.data_frame
             def data():
-                return df[['species','island',input.var1()]]
+                dff = filtered_df()
+                return dff[['species','island',input.var1()]]
 
 with ui.nav_panel("Page 2"):
     "두번째 페이지"
