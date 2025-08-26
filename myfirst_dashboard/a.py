@@ -5,5 +5,4 @@ import pandas as pd
 conn = sqlite3.connect("penguins.db")
 
 df = pd.read_sql_query("SELECT * FROM penguins LIMIT 5;", conn)
-
-
+df
