@@ -120,3 +120,59 @@ y = np.array([2,4,6,2,4,6])
 px = np.array([0.15,0.15,0.2,0.15,0.15,0.2])
 COV_XY = np.sum((x-E_X)*(y-E_Y)*px)
 p_XY = COV_XY/(np.sqrt(VAR_X)*np.sqrt(VAR_Y))
+
+# 샘플 뽑기
+N = 10000
+idx = np.random.choice(len(x),size=N,p=px)
+X = np.array([x[i] for i in idx])
+Y = np.array([y[i] for i in idx])
+upper = np.sum((X - X.mean())*(Y - Y.mean())) 
+lower_left = np.sqrt(np.sum((X - X.mean())**2))
+lower_right = np.sqrt(np.sum((Y - Y.mean())**2))
+upper / (lower_left*lower_right)
+
+import scipy.stats as stats
+corr_coeff, p_value = stats.pearsonr(X, Y)
+print(f"피어슨 상관계수 (r): {corr_coeff:.4f}")
+
+
+# 상관계수 
+x = np.array([2,5,3,7])
+noise = np.random.normal(loc=0,scale=2,size=4)
+y = 2*x + 3 +noise
+
+plt.scatter(x,y,color='black',label='points')
+
+x_vals = np.linspace(x.min()-1, x.max()+1, 100)
+y_vals = 3 + 2 * x_vals
+plt.plot(x_vals, y_vals, color="red", linewidth=2, label="y=2x+3")
+plt.grid(True)
+plt.legend()
+plt.show()
+
+#
+x = np.array([10,20,30,40,50])
+y = np.array([5,15,25,35,48])
+x = x.reshape(-1,1)
+X = np.hstack([np.ones((x.shape[0],1)),x])
+
+beta = np.array([2.0,1.0]).reshape(-1,1)
+
+def ssr(beta_vec):
+    return (y - X @ beta_vec).transpose() @ (y-X @ beta_vec)
+
+
+ssr(beta)
+
+from scipy.optimize import minimize
+
+def ssr(beta):
+    beta = beta.reshape(-1,1)
+    r = y - X @ beta
+    return float((r.T @ r))
+
+res = minimize(ssr,x0=np.zeros(2))
+print("최적해 beta =", res.x)
+print("최소 ssr =", res.fun)
+
+a = np.linalg.inv(X.transpose()@X)
