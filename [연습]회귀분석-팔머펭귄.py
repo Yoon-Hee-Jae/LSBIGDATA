@@ -104,3 +104,19 @@ px = np.array([0.2,0,0.3,0.1,0.3,0.1])
 COV_XY = np.sum((x-0.5)*(y-4.2)*px) # 공분산
 
 p_XY = COV_XY/(np.sqrt(VAR_X)*np.sqrt(VAR_Y))
+
+# 연습 2 상관계수 구하기
+X = np.array([0,1])
+Y = np.array([2,4,6])
+X_likelihood = np.array([0.5,0.5])
+Y_likelihood = np.array([0.3,0.3,0.4])
+E_X = np.sum(X * X_likelihood)
+E_Y = np.sum(Y * Y_likelihood)
+VAR_X = np.sum(X**2*X_likelihood)-E_X**2
+VAR_Y = np.sum(Y**2*Y_likelihood)-E_Y**2
+
+x = np.array([0,0,0,1,1,1])
+y = np.array([2,4,6,2,4,6])
+px = np.array([0.15,0.15,0.2,0.15,0.15,0.2])
+COV_XY = np.sum((x-E_X)*(y-E_Y)*px)
+p_XY = COV_XY/(np.sqrt(VAR_X)*np.sqrt(VAR_Y))
