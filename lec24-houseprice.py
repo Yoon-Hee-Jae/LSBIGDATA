@@ -290,3 +290,14 @@ submit_data['SalePrice'] = pred_test
 submit_data.to_csv('./data/house_prediction/submission1731.csv', index=False)
 
 print("최종 예측 완료! submission.csv 생성됨")
+
+
+
+#####
+# 데이터 불러오기
+train_df = pd.read_csv('./data/house_prediction/train.csv')
+test_df = pd.read_csv('./data/house_prediction/test.csv')
+submit_df = pd.read_csv('./data/house_prediction/sample_submission.csv')
+
+train_X_sub, valid_X, train_y_sub, valid_y = train_test_split(train_X, train_y, test_size = 0.3, random_state = 2025, shuffle=True)
+train_data
