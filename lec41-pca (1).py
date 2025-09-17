@@ -54,3 +54,4 @@ import numpy as np
 eig_values, eig_vectors = linalg.eig(scaled_data.cov(ddof=1))
 np.sqrt(eig_values[0] / eig_values[2])
 eig_vectors
+
