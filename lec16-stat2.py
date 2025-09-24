@@ -6,7 +6,7 @@ plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
 asdasdasdasdasdsadad
-
+as
 
 #지수분포
 # SCALE = 지수분포의 평균, 기댓값
