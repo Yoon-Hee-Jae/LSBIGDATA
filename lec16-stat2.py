@@ -5,6 +5,9 @@ from scipy.stats import expon
 plt.rcParams['font.family'] = 'Malgun Gothic'
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
+asdasdasdasdasdsadad
+
+
 #지수분포
 # SCALE = 지수분포의 평균, 기댓값
 # X1: θ = 0.5, X2: θ = 3
