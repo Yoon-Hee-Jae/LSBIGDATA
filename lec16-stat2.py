@@ -27,7 +27,7 @@ sum(x2 <= 2)
 # x축 범위: -1 ~ 10
 x = np.linspace(-1, 10, 500)
 
-# 각각의 PDF 계산
+# 각각의 PDF 계산lec
 pdf1 = X1.pdf(x)
 pdf2 = X2.pdf(x)
 
